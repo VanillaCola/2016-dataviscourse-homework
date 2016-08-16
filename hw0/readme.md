@@ -1,6 +1,6 @@
 # CS-5630 / CS-6630 Homework 0
 
-**Due: Friday, August 28, 11:59 pm. Value: 2%**
+**Due: Friday, August 26, 11:59 pm. Value: 2%**
 
 Welcome to CS-5630 / CS-6630 - Visualization.  In this class, we will be using a variety of tools that will require some initial configuration. To ensure everything goes smoothly moving forward, we will setup the majority of those tools in this homework.  This homework will not be graded **except** for Problem 2. In Problem 2 you set up git and github for this course, which is essential before starting with HW 1.
 
