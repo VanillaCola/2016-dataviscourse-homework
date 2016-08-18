@@ -17,7 +17,7 @@ This educational micro-plan will enable you to create five private repositories.
 **It is important that you complete this step quickly, as it may take a while for github to provide you with the repositories. Make sure to request a .edu e-mail address if you don't already have one.**
 
 ### Class Survey
-Please complete the [course survey located here](https://docs.google.com/forms/d/1W74NB-xAB1vKK_QmE_hL4pvLoFubOgsgIcg-6psqUa8/viewform). It should only take a few moments of your time. It will ask you for your **github user name**, so you must go trough the sign-up process first. It is imperative that you fill out the survey on time.
+Please complete the [course survey located here](https://docs.google.com/forms/d/1jgaNuAReJLoxLDCPxCNMMuzSd3VbVPm3ja6RyaWpwDo/viewform). It should only take a few moments of your time. It will ask you for your **github user name**, so you must go trough the sign-up process first. It is imperative that you fill out the survey on time.
 
 ### Piazza
 We will use Piazza as a forum for discussion, to find team members, to arrange appointments, and to ask questions. Piazza should be your primary form of communication with the staff and other students. Use the e-mail only for individual requests, e.g., to inform us if you're sick for an exam, etc. If you ask a general question via e-mail, we will ask you to ask it on Piazza instead. All information such as new homework assignments will be linked from the website but also announced on Piazza.
