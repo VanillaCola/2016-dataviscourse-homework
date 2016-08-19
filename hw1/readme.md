@@ -1,11 +1,11 @@
 #CS-5630 / CS-6630 Homework 1
-*Due: Friday, September 2, 11:59 pm. Value: 4%*
+*Due: Friday, September 2, 11:59 pm.*
 
 In this assignment you will create a simple webpage with some graphical content using HTML, CSS, and SVG. These are basic building blocks that we will manipulate in later projects using Javascript and D3 in order to create visualizations. As such, it is important that you know how the pieces work on their own, before moving forward.
 
 ## The Data
 
-This is one of the datasets from Anscombe's quartett that we discussed in Lecture. You will create multiple representations for this dataset, specifically a bar chart, a line chart, an area chart and a scatterplot, all using SVG. 
+This is one of the datasets from Anscombe's quartett that we discussed in Lecture. You will create multiple representations for this dataset, specifically a bar chart, a line chart, an area chart and a scatterplot, all using vanilla SVG. *You should write the svg manually and not create it using either javascript or drawing software.*
 
 | X | Y |
 --- |----
