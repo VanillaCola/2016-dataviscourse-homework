@@ -8,11 +8,11 @@ Welcome to CS-5630 / CS-6630 - Visualization.  In this class, we will be using a
 
 ### Sign up for github
 
-You'll be using git and [GitHub](http://github.com) to manage homework assignments and projects.
+You'll be using git and [GitHub](http://github.com) to manage your projects and we also suggest you use github to manage your homework.
 
 Sign up for a github account (if you don't already have one) and request a free account upgrade [on this page](https://education.github.com/). You'll need to verify ownership of an **.edu e-mail address** if you didn't sign up with your .edu account. 
 
-This educational micro-plan will enable you to create five private repositories. We will need two for the class. If you are already using private repositories at github under your micro plan for other projects, and you cannot free-up your quota, please contact the staff well in advance of the deadline.
+This educational micro-plan will enable you to create five private repositories. We will need at least one for the class, if you also manage your homeworks on github you'll need two. 
 
 **It is important that you complete this step quickly, as it may take a while for github to provide you with the repositories. Make sure to request a .edu e-mail address if you don't already have one.**
 
