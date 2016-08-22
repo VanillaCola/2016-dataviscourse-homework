@@ -23,7 +23,7 @@ We will use [Canvas](https://utah.instructure.com/courses/389965) for discussion
 
 Please introduce yourself to your classmates and the course staff, as a follow-up [to the introduction thread](https://utah.instructure.com/courses/389965/discussion_topics/1702163). Include your name/nickname, your affiliation, why you are taking this course, and tell us something interesting about yourself (e.g., an unusual hobby, past travels, or a cool project you did, etc.). Also tell us whether you have experience with visualization.
 
-## Task 3 - Introduction to HTML, CSS
+## Task 4 - Introduction to HTML, CSS
 
 **There is no need to hand anything in — this is an exercise and you can check whether you understood the concepts.**
 
