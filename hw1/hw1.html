@@ -9,6 +9,24 @@
 			stroke:#b3b3b3; 
 			stroke-width:.1px;
 		}
+		
+		circle
+		{
+			fill:#008040; 
+		}
+		
+		polyline.line
+		{
+			fill:none;
+			stroke-width:.1px;
+			stroke:#008040;
+		}
+		
+		polyline.area
+		{
+			fill:#008040;
+			stroke-width:.1px;
+		}
 	</style>
 </head>
 <body>
@@ -28,65 +46,81 @@
 </table>
 
 <h1>Bar Charts</h1>
-<svg width="300" height="300" style="stroke:black">
- <g transform="translate(0, 300) scale(20, -20)"">
-<rect  x="0"  y="1" width="10.0" height="1" />
-<rect  x="0"  y="2" width="8.0"  height="1" />
-<rect  x="0"  y="3" width="13.0" height="1" />
-<rect  x="0"  y="4" width="9.0"  height="1" />
-<rect  x="0"  y="5" width="11.0" height="1" />
-<rect  x="0"  y="6" width="14.0" height="1" />
-<rect  x="0"  y="7" width="6.0"  height="1" />
-<rect  x="0"  y="8" width="4.0"  height="1" />
-<rect  x="0"  y="9" width="12.0" height="1" />
-<rect  x="0" y="10" width="7.0"  height="1" />
-<rect  x="0" y="11" width="5.0"  height="1" />
+<svg width="700" height="300">
+ <g transform="translate(0, 300) scale(20, -20)">
+<rect  x="0"  y="1"  width="10.0" height="1" />
+<rect  x="0"  y="2"  width="8.0"  height="1" />
+<rect  x="0"  y="3"  width="13.0" height="1" />
+<rect  x="0"  y="4"  width="9.0"  height="1" />
+<rect  x="0"  y="5"  width="11.0" height="1" />
+<rect  x="0"  y="6"  width="14.0" height="1" />
+<rect  x="0"  y="7"  width="6.0"  height="1" />
+<rect  x="0"  y="8"  width="4.0"  height="1" />
+<rect  x="0"  y="9"  width="12.0" height="1" />
+<rect  x="0"  y="10" width="7.0"  height="1" />
+<rect  x="0"  y="11" width="5.0"  height="1" />
+ </g>
+ 
+  <g transform="translate(400, 300) scale(20, -20)">
+<rect  x="0"  y="1" width="8.04"  height="1" />
+<rect  x="0"  y="2" width="6.95"  height="1" />
+<rect  x="0"  y="3" width="7.58"  height="1" />
+<rect  x="0"  y="4" width="8.81"  height="1" />
+<rect  x="0"  y="5" width="8.33"  height="1" />
+<rect  x="0"  y="6" width="9.96"  height="1" />
+<rect  x="0"  y="7" width="7.24"  height="1" />
+<rect  x="0"  y="8" width="4.26"  height="1" />
+<rect  x="0"  y="9" width="10.84" height="1" />
+<rect  x="0" y="10" width="4.82"  height="1" />
+<rect  x="0" y="11" width="5.68"  height="1" />
  </g>
 </svg>
 
 <h1>Line Charts</h1>
-<svg width="400" height="400" style="stroke:black">
-    <rect x="0" y="0" width="400" height="400"
-          style="fill:white; stroke:black; stroke-width:3px"/>
+<svg width="700" height="300">
 		  
- <g transform="translate(0, 400) scale(1, -1)" style="fill:#008040; stroke:#008040">
-<rect  x="1"  y="0" width="10.0" height="1" />
-<rect  x="2"  y="0" width="8.0"  height="1" />
-<rect  x="3"  y="0" width="13.0" height="1" />
-<rect  x="4"  y="0" width="9.0"  height="1" />
-<rect  x="5"  y="0" width="11.0" height="1" />
-<rect  x="6"  y="0" width="14.0" height="1" />
-<rect  x="7"  y="0" width="6.0"  height="1" />
-<rect  x="8"  y="0" width="4.0"  height="1" />
-<rect  x="9"  y="0" width="12.0" height="1" />
-<rect  x="10" y="0" width="7.0"  height="1" />
-<rect  x="11" y="0" width="5.0"  height="1" />
- </g>
+ <g transform="translate(0, 300) scale(20, -20)">
+<polyline class="line" points=" 1,10.0 2,8 3,13.0 4,9.0 5,11.0 6,14.0 7,6.0 8,4.0 
+		9,12.0 10,7.0 11,5.0 " />
+</g>
+		
+<g transform="translate(400, 300) scale(20, -20)">
+<polyline class="line" points=" 1,8.04 2,6.95 3,7.58 4,8.81 5,8.33 6,9.96 7,7.24 8,4.26 
+		9,10.84 10,4.82 11,5.68 " />
+</g>
 </svg>
 
-<h1>Area Charts</h1>
-<svg width="400" height="400" style="stroke:black">
-    <rect x="0" y="0" width="400" height="400"
-          style="fill:white; stroke:black; stroke-width:3px"/>
+<h1>Line Charts</h1>
+<svg width="700" height="300">
 		  
- <g transform="translate(0, 400) scale(1, -1)" style="fill:#008040; stroke:#008040">
- <circle cx="200" cy="160.8" r="10" />
- <circle cx="8.0*20" cy="6.95*20" r="10"/>
- <circle cx="13.0*20" cy="7.58*20" r="10"/>
- <circle cx="9.0*20" cy="8.81*20" r="10"/>
- </g>
+ <g transform="translate(0, 300) scale(20, -20)">
+<polyline class="area" points="1,0 1,10.0 2,8 3,13.0 4,9.0 5,11.0 6,14.0 7,6.0 8,4.0 
+		9,12.0 10,7.0 11,5.0 11,0" />
+</g>
+		
+<g transform="translate(400, 300) scale(20, -20)">
+<polyline class="area" points="1,0 1,8.04 2,6.95 3,7.58 4,8.81 5,8.33 6,9.96 7,7.24 8,4.26 
+		9,10.84 10,4.82 11,5.68 11,0" />
+</g>
 </svg>
 
 <h1>Scatter Plot</h1>
-<svg width="400" height="400" style="stroke:black">
+<svg width="400" height="400">
     <rect x="0" y="0" width="400" height="400"
           style="fill:white; stroke:black; stroke-width:3px"/>
 		  
- <g transform="translate(0, 400) scale(1, -1)" style="fill:#008040; stroke:#008040">
- <circle cx="200" cy="160.8" r="10" />
- <circle cx="8.0*20" cy="6.95*20" r="10"/>
- <circle cx="13.0*20" cy="7.58*20" r="10"/>
- <circle cx="9.0*20" cy="8.81*20" r="10"/>
+ <g transform="translate(0, 400) scale(20, -20)">
+ <circle cx="10.0" cy="8.04"  r="0.5" />
+ <circle cx="8.0"  cy="6.95"  r="0.5"/>
+ <circle cx="13.0" cy="7.58"  r="0.5"/>
+ <circle cx="9.0"  cy="8.81"  r="0.5"/>
+ <circle cx="11.0" cy="8.33"  r="0.5" />
+ <circle cx="14.0" cy="9.96"  r="0.5"/>
+ <circle cx="6.0"  cy="7.24"  r="0.5"/>
+ <circle cx="4.0"  cy="4.26"  r="0.5"/>
+ <circle cx="12.0" cy="10.84" r="0.5" />
+ <circle cx="7.0"  cy="4.82"  r="0.5"/>
+ <circle cx="5.0"  cy="5.68"  r="0.5"/>
  </g>
 </svg>
 </body>
