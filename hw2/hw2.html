@@ -4,27 +4,18 @@
     <meta charset="UTF-8">
     <title>Homework 2 Solution</title>
     <style>
-        .barChart {
-            fill: steelblue;
-            stroke: darkgray;
-            stroke-width: 1px;
-        }
-
-        .barChart rect:hover {
+        #B1:hover > rect, #B2:hover > rect {
             fill: seagreen;
         }
 
         .lines {
             stroke: steelblue;
-            fill: none
+            fill: none;
+			stroke-width: .1px;
         }
 
         .areas {
             stroke: none;
-            fill: steelblue
-        }
-
-        circle {
             fill: steelblue;
         }
 
@@ -46,26 +37,28 @@
             padding: 1em;
         }
     </style>
+
+<script src="script.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
 </head>
-<body>
-<body>
+<body onload="changeData()">
 
 <h3>CS-5630 / CS-6630 Homework 2</h3>
-<span>Your Name</span>
-<span>Your Email Address</span>
-<span>u0123456</span>
+<span>Jiyuan Li</span>
+<span>u0710273@utah.edu</span>
+<span>u0710273</span>
 
 <br/>
 <hr/>
 <br/>
 
 <span>
-    <button>Staircase</button>
+    <button onclick="staircase()">Staircase</button>
 </span>
 
 <span>
     <label>Dataset:</label>
-    <select id="dataset">
+    <select id="dataset" onchange="changeData()">
         <option value="anscombe_I">Anscombe's Quartet I</option>
         <option selected value="anscombe_II">Anscombe's Quartet II</option>
         <option value="anscombe_III">Anscombe's Quartet III</option>
@@ -74,19 +67,21 @@
 </span>
 
 <span>
-    <input type="checkbox" id="random"> Random Subset
+    <input type="checkbox" id="random" onclick="randomSubset()"> Random Subset
 </span>
 
 <br/>
 
 <div>
     <h2>Bar Charts</h2>
-    <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+    <svg width="200" height="200" id="B1">
+	<g id = "BarChart1" transform="translate(0, 200) scale(14, -14)" onmouseover="hover(this)">
+	 </g>
     </svg>
 
-    <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+    <svg width="200" height="200" id="B2">
+	<g id="BarChart2" transform="translate(0, 200) scale(14, -14)">
+	 </g>
     </svg>
 </div>
 
@@ -94,11 +89,17 @@
     <h2>Line Charts</h2>
 
     <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+         <g id="LineChart1" transform="translate(0, 200) scale(1, -1)">
+		<path class="lines" d="M1 10.0 L2 8.0 L3 13.0 L4 9.0 L5 11.0 L6 14.0 L7 6.0 L8 4.0 
+		L9 12.0 L10 7.0 L11 5.0 " />
+		</g>
     </svg>
 
     <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+		<g id="LineChart2" transform="translate(0, 200) scale(1, -1)">
+		<path class="lines" d="M1 8.04 2,6.95 3,7.58 4,8.81 5,8.33 6,9.96 7,7.24 8,4.26 
+		9,10.84 10,4.82 11,5.68 " />
+</g>
     </svg>
 </div>
 
@@ -106,19 +107,27 @@
     <h2>Area Charts</h2>
 
     <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+         <g id="AreaChart1" transform="translate(0, 200) scale(14, -14)">
+		<path class="areas" d="M1 1.0 L1 10.0 L2 8.0 L3 13.0 L4 9.0 L5 11.0 L6 14.0 L7 6.0 L8 4.0 
+		L9 12.0 L10 7.0 L11 5.0 L11 1.0Z" />
+		</g>
     </svg>
 
     <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+		<g id="AreaChart2" transform="translate(0, 200) scale(14, -14)">
+		<path class="areas" d="M1 1.0 L1 8.04 2,6.95 3,7.58 4,8.81 5,8.33 6,9.96 7,7.24 8,4.26 
+		9,10.84 10,4.82 11,5.68 L11 1.0Z" />
+		</g>
     </svg>
 </div>
 
 <div>
     <h2>Scatterplot</h2>
 
-    <svg width="200" height="200">
-        <!-- Paste your HW 1 solution here -->
+    <svg width="250" height="200">
+      <rect class="frame" x="0" y="0" width="250" height="200"/>  
+	 <g id="Scatterplot" transform="translate(0, 200) scale(12, -12)">
+	 </g>
     </svg>
 </div>
 </body>
