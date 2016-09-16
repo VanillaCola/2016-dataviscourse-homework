@@ -1,6 +1,9 @@
 // Global var for FIFA world cup data
 var allWorldCupData;
 
+var cur_rect = null;
+var rect_color = null;
+var cur_color = null;
 
 /**
  * Render and update the bar chart based on the selection of the data type in the drop-down box
@@ -8,23 +11,251 @@ var allWorldCupData;
  * @param selectedDimension a string specifying which dimension to render in the bar chart
  */
 function updateBarChart(selectedDimension) {
-
     var svgBounds = d3.select("#barChart").node().getBoundingClientRect(),
         xAxisWidth = 100,
         yAxisHeight = 70;
+	
 
     // ******* TODO: PART I *******
 
     // Create the x and y scales; make
     // sure to leave room for the axes
-
+	var X_MIN = d3.min(allWorldCupData, function (d) {
+            return d.year;
+        });
+	
+	var X_MAX = d3.max(allWorldCupData, function (d) {
+            return d.year;
+        });
+	
+	allWorldCupData = allWorldCupData.sort(function(a, b) {return a.year - b.year});
+    var xScale = d3.scaleBand()
+		.domain(allWorldCupData.map(function (d)
+		{
+			return d.year;
+		}))
+        .range([70, 500]).padding(0.1);
+		
+	var Y_MAX;
+	var Y_MIN;
+	
+	if(selectedDimension == "attendance")
+	{
+		Y_MIN = d3.min(allWorldCupData, function (d) {
+            return d.attendance;
+        });
+		Y_MAX = d3.max(allWorldCupData, function (d) {
+            return d.attendance;
+        });
+	}
+	else if(selectedDimension == "goals")
+	{
+		Y_MIN = d3.min(allWorldCupData, function (d) {
+            return d.goals;
+        });
+		Y_MAX = d3.max(allWorldCupData, function (d) {
+            return d.goals;
+        });
+	}
+	else if(selectedDimension == "teams")
+	{
+		Y_MIN = d3.min(allWorldCupData, function (d) {
+            return d.teams;
+        });
+		Y_MAX = d3.max(allWorldCupData, function (d) {
+            return d.teams;
+        });
+	}
+	else if(selectedDimension == "matches")
+	{
+		Y_MIN = d3.min(allWorldCupData, function (d) {
+            return d.matches;
+        });
+		Y_MAX = d3.max(allWorldCupData, function (d) {
+            return d.matches;
+        });
+	}
+		
+    var yScale = d3.scaleLinear()
+        .domain([Y_MAX, 0])
+        .range([70, 400])
+		.nice();
+		
+	var iScale = d3.scaleLinear()
+        .domain([0, allWorldCupData.length])
+        .range([70, 500])
+		.nice();
+		
+		
     // Create colorScale
+	var colorScale = d3.scaleLinear()
+                // notice the three interpolation points
+                .domain([Y_MIN, Y_MAX])
+                // each color matches to an interpolation point
+                .range(["steelblue", "#24425C"]);
 
     // Create the axes (hint: use #xAxis and #yAxis)
-
+	var xAxis = d3.axisBottom();
+    xAxis.scale(xScale);
+	
+	d3.select("#xAxis")
+		.transition()
+		.duration(2000)
+		.attr("transform", "translate(0, 350)")
+         .call(xAxis)
+		 .selectAll("text")
+		 .style("text-anchor", "end")
+		 .style("font-weight", "bold")
+		 .attr("dx", "-.5em")
+		 .attr("dy", "-.2em")
+		 .attr("transform", "rotate(-90)"); 
+		
+	var yAxis = d3.axisLeft();
+        yAxis.scale(yScale);
+		
+	d3.select("#yAxis")
+			.transition()
+		.duration(2000)
+		.attr("transform", "translate(70, -50)")
+         .call(yAxis)
+		 .selectAll("text")
+		 .style("text-anchor", "end")
+		 .style("font-weight", "bold")
+		 .style("font-size", "14px");
+		 
     // Create the bars (hint: use #bars)
-
-
+	
+	var Scale = d3.scaleLinear()
+        .domain([0, Y_MAX])
+        .range([0, 330])
+		.nice();
+	
+	var bars = d3.select("#bars");
+	bars.attr("transform", "translate(0, 350) scale(1, -1)");
+	
+	var data = bars.selectAll("rect").data(allWorldCupData);
+	
+	var new_bars = data.enter().append("rect")
+			.attr("x", function(d, i){
+				return iScale(i);
+			})
+			.attr("y",0)
+			.attr("width", 21)
+			.attr("height", function(d)
+			{
+				if(selectedDimension == "attendance")
+				{
+						return Scale(d.attendance);
+				}
+				else if(selectedDimension == "goals")
+				{
+						return Scale(d.goals);
+				}
+				else if(selectedDimension == "teams")
+				{
+						return Scale(d.teams);
+				}
+				else if(selectedDimension == "matches")
+				{
+						return Scale(d.matches);
+				}
+			})
+			.style("fill", function(d)
+			{
+				if(this == cur_rect)
+				{
+						return rect_color;
+				}
+				else
+				{
+					if(selectedDimension == "attendance")
+					{
+							return colorScale(d.attendance);
+					}
+					else if(selectedDimension == "goals")
+					{
+							return colorScale(d.goals);
+					}
+					else if(selectedDimension == "teams")
+					{
+							return colorScale(d.teams);
+					}
+					else if(selectedDimension == "matches")
+					{
+							return colorScale(d.matches);
+					}
+				}
+			})
+			.style("stroke", "white")
+			.style("stroke-width", "0.5px")
+			.on("click", function()
+			{
+				if(cur_rect != null)
+				{
+					d3.select(cur_rect).style("fill", rect_color);
+				}
+				cur_rect = this;
+				rect_color = this.style.fill;
+				console.log(rect_color);
+				d3.select(this).style("fill", "red");
+				updateInfo(this);
+			});
+	
+	data.style("opacity", 1)
+		.transition()
+		.duration(2000)
+		.style("opacity", 0)
+		.remove();	//Remove previous data
+	
+	data = new_bars.merge(data);
+	
+	data.transition()
+		.duration(2000)
+		.attr("x", function(d, i){
+				return iScale(i);
+			})
+		.attr("y",0)
+		.attr("width", 20)
+		.attr("height", function(d)
+			{
+				if(selectedDimension == "attendance")
+				{
+						return Scale(d.attendance);
+				}
+				else if(selectedDimension == "goals")
+				{
+						return Scale(d.goals);
+				}
+				else if(selectedDimension == "teams")
+				{
+						return Scale(d.teams);
+				}
+				else if(selectedDimension == "matches")
+				{
+						return Scale(d.matches);
+				}
+			})
+			.style("fill", function(d)
+			{
+				if(selectedDimension == "attendance")
+				{
+						return colorScale(d.attendance);
+				}
+				else if(selectedDimension == "goals")
+				{
+						return colorScale(d.goals);
+				}
+				else if(selectedDimension == "teams")
+				{
+						return colorScale(d.teams);
+				}
+				else if(selectedDimension == "matches")
+				{
+						return colorScale(d.matches);
+				}
+			})
+			.style("stroke", "white")
+			.style("stroke-width", "1px");
 
     // ******* TODO: PART II *******
 
@@ -45,12 +276,14 @@ function updateBarChart(selectedDimension) {
  *  goals, matches, attendance and teams.
  */
 function chooseData() {
-
+	//Done!
     // ******* TODO: PART I *******
     //Changed the selected data when a user selects a different
     // menu item from the drop down.
-
+	var dataset = document.getElementById("dataset");
+	updateBarChart(dataset.value);
 }
+
 
 /**
  * Update the info panel to show info about the currently selected world cup
@@ -66,7 +299,8 @@ function updateInfo(oneWorldCup) {
 
     // Hint: For the list of teams, you can create an list element for each team.
     // Hint: Select the appropriate ids to update the text content.
-
+	
+	console.log(oneWorldCup);
 
 }
 
@@ -87,6 +321,16 @@ function drawMap(world) {
     // Draw the background (country outlines; hint: use #map)
     // Make sure and add gridlines to the map
 
+	var svg = d3.select("#map");
+	
+	var path = d3.geoPath().projection(projection);
+	
+	d3.json(world, function(json)
+	{
+		//svg.append("path")
+			//.datum(topojson.feature(world,world.objects.countries))
+			//.attr("d", path);
+	});
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
 
