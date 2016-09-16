@@ -188,7 +188,7 @@ function updateBarChart(selectedDimension) {
 			})
 			.style("stroke", "white")
 			.style("stroke-width", "0.5px")
-			.on("click", function()
+			.on("click", function(d)
 			{
 				if(cur_rect != null)
 				{
@@ -196,16 +196,17 @@ function updateBarChart(selectedDimension) {
 				}
 				cur_rect = this;
 				rect_color = this.style.fill;
-				console.log(rect_color);
+				
 				d3.select(this).style("fill", "red");
-				updateInfo(this);
+				updateInfo(d);
+				//updateMap(d);
 			});
 	
 	data.style("opacity", 1)
 		.transition()
 		.duration(2000)
 		.style("opacity", 0)
-		.remove();	//Remove previous data
+		.remove();
 	
 	data = new_bars.merge(data);
 	
@@ -237,25 +238,45 @@ function updateBarChart(selectedDimension) {
 			})
 			.style("fill", function(d)
 			{
-				if(selectedDimension == "attendance")
+				if(this == cur_rect)
 				{
-						return colorScale(d.attendance);
+						return rect_color;
 				}
-				else if(selectedDimension == "goals")
+				else
 				{
-						return colorScale(d.goals);
-				}
-				else if(selectedDimension == "teams")
-				{
-						return colorScale(d.teams);
-				}
-				else if(selectedDimension == "matches")
-				{
-						return colorScale(d.matches);
+					if(selectedDimension == "attendance")
+					{
+							return colorScale(d.attendance);
+					}
+					else if(selectedDimension == "goals")
+					{
+							return colorScale(d.goals);
+					}
+					else if(selectedDimension == "teams")
+					{
+							return colorScale(d.teams);
+					}
+					else if(selectedDimension == "matches")
+					{
+							return colorScale(d.matches);
+					}
 				}
 			})
 			.style("stroke", "white")
-			.style("stroke-width", "1px");
+			.style("stroke-width", "1px")
+			.on("click", function(d)
+			{
+				if(cur_rect != null)
+				{
+					d3.select(cur_rect).style("fill", rect_color);
+				}
+				cur_rect = this;
+				rect_color = this.style.fill;
+				
+				d3.select(this).style("fill", "red");
+				updateInfo(d);
+				//updateMap(d);
+			});
 
     // ******* TODO: PART II *******
 
@@ -300,8 +321,25 @@ function updateInfo(oneWorldCup) {
     // Hint: For the list of teams, you can create an list element for each team.
     // Hint: Select the appropriate ids to update the text content.
 	
-	console.log(oneWorldCup);
+	var Title = oneWorldCup.EDITION;
+	
+	var Host = oneWorldCup.host;
+	var Winner = oneWorldCup.winner;
+	var Silver = oneWorldCup.runner_up;
+	var Teams = oneWorldCup.teams;
+	
+	d3.select("#edition").text(Title);
+	d3.select("#host").text(Host);
+	d3.select("#winner").text(Winner);
+	d3.select("#silver").text(Silver);
+	
+	var teams = "";
+	for(var i = 0; i < oneWorldCup.teams; ++i)
+	{
+		teams += "<li>" + oneWorldCup.teams_names[i]+"</li>";
+	}
 
+	d3.select("#teams").html(teams);
 }
 
 /**
@@ -321,15 +359,19 @@ function drawMap(world) {
     // Draw the background (country outlines; hint: use #map)
     // Make sure and add gridlines to the map
 
-	var svg = d3.select("#map");
+	var map_group = d3.select("#map");
+		
 	
 	var path = d3.geoPath().projection(projection);
 	
 	d3.json(world, function(json)
 	{
-		//svg.append("path")
-			//.datum(topojson.feature(world,world.objects.countries))
-			//.attr("d", path);
+		map_group.selectAll(".countries")
+			.data(topojson.feature(world, world.objects.countries).features)
+			.enter()
+			.append("path")
+			.classed("countries", true)
+			.attr("d", path);
 	});
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
