@@ -156,7 +156,7 @@ function updateBarChart(selectedDimension) {
 				
 				d3.select(this).style("fill", "red");
 				updateInfo(d);
-				//updateMap(d);
+				updateMap(d);
 			})			
 			.transition()
 			.duration(2000)
@@ -253,7 +253,6 @@ function updateInfo(oneWorldCup) {
 	var Host = oneWorldCup.host;
 	var Winner = oneWorldCup.winner;
 	var Silver = oneWorldCup.runner_up;
-	var Teams = oneWorldCup.teams;
 	
 	d3.select("#edition").text(Title);
 	d3.select("#host").text(Host);
@@ -279,7 +278,7 @@ function drawMap(world) {
     //(note that projection is global!
     // updateMap() will need it to add the winner/runner_up markers.)
 
-    projection = d3.geoConicConformal().scale(200).translate([500, 450]);
+    projection = d3.geoConicConformal().scale(150).translate([400, 350]);
 
     // ******* TODO: PART IV *******
 
@@ -294,34 +293,23 @@ function drawMap(world) {
 
 	var graticule = d3.geoGraticule();
 	
-		map.append("path")
-			.data(graticule)
-			.enter()
-			.classed("countries", true)
-			.attr("d", path);
+	map.selectAll(".countries")
+		.data(countries)
+		.enter()
+		.append("path")
+		.classed("countries", true)
+		.attr("d", path)
+		.attr("id", function(d)
+		{
+			return d.id;
+		});
 	
-	d3.json(world, function()
-	{
-			
-		map.selectAll(".countries")
-			.data(countries)
-			.enter()
-			.append("path")
-			.classed("countries", true)
-			.attr("d", path)
-			.attr("id", function(d)
-			{
-				return d.id;
-			});
-			
-		//draw graticule
-		/*
-		map.append("path")
-			.data(graticule)
-			.enter()
-			.classed("countries", true)
-			.attr("d", path);*/
-	});
+	map.append("path")
+		.datum(graticule)
+		.classed("grat", true)
+		.attr("d", path);	
+
+	
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
 
@@ -349,7 +337,8 @@ function clearMap() {
 		.classed("countries", true)
 		.classed("host", false)
 		.classed("silver", false)
-		.classed("gold", false);
+		.classed("gold", false)
+		.classed("team", false);
 }
 
 
@@ -377,7 +366,34 @@ function updateMap(worldcupData) {
 
     //We strongly suggest using classes to style the selected countries.
 
-
+	console.log(worldcupData);
+	
+	var Host = worldcupData.host_country_code;
+	
+	var Winner = worldcupData.winner;
+	var Silver = worldcupData.runner_up;
+	
+	var ISO = worldcupData.teams_iso;
+	
+	for(var i = 0; i < worldcupData.teams; i++)
+	{
+		if(worldcupData.teams_names[i] == Winner)
+		{
+			Winner = ISO[i];
+		}
+		else if(worldcupData.teams_names[i] == Silver)
+		{
+			Silver = ISO[i];
+		}
+	}
+	
+	var map = d3.select("#map");
+	map.select("#"+Host).classed("host", true);		//Japan and Korean
+	
+	for(var i = 0; i < worldcupData.teams; i++)
+	{
+		map.select("#"+ISO[i]).classed("team", true);
+	}
 
 }
 
