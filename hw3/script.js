@@ -303,11 +303,11 @@ function drawMap(world) {
 		{
 			return d.id;
 		});
-	
+		
 	map.append("path")
 		.datum(graticule)
 		.classed("grat", true)
-		.attr("d", path);	
+		.attr("d", path);
 
 	
     // Hint: assign an id to each country path to make it easier to select afterwards
@@ -334,10 +334,10 @@ function clearMap() {
 
 	var map = d3.select("#map");
 	var points = d3.select("#points");
-	map.selectAll(".countries")
-		.classed("countries", true)
+	map.selectAll("path")
 		.classed("host", false)
-		.classed("silver", false)
+		.classed("team", false)
+		.classed("countries", true);
 
 	points.selectAll("circle")
 		.remove();
@@ -367,8 +367,6 @@ function updateMap(worldcupData) {
     //Iterate through all participating teams and change their color as well.
 
     //We strongly suggest using classes to style the selected countries.
-
-	console.log(worldcupData);
 	
 	var Host = worldcupData.host_country_code;
 	
@@ -412,6 +410,11 @@ function updateMap(worldcupData) {
             .attr("cy",	ru_pos[1])
 			.attr("r", 8)
 			.classed("silver", true);
+}
+
+function displayRecords(id)
+{
+	console.log(id);
 }
 
 /* DATA LOADING */
