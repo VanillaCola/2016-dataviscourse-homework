@@ -333,12 +333,14 @@ function clearMap() {
     //d3 selection and .classed to set these classes on and off here.
 
 	var map = d3.select("#map");
+	var points = d3.select("#points");
 	map.selectAll(".countries")
 		.classed("countries", true)
 		.classed("host", false)
 		.classed("silver", false)
-		.classed("gold", false)
-		.classed("team", false);
+
+	points.selectAll("circle")
+		.remove();
 }
 
 
@@ -371,7 +373,10 @@ function updateMap(worldcupData) {
 	var Host = worldcupData.host_country_code;
 	
 	var Winner = worldcupData.winner;
+	var win_pos = projection(worldcupData.win_pos);
+	
 	var Silver = worldcupData.runner_up;
+	var ru_pos = projection(worldcupData.ru_pos);
 	
 	var ISO = worldcupData.teams_iso;
 	
@@ -394,7 +399,19 @@ function updateMap(worldcupData) {
 	{
 		map.select("#"+ISO[i]).classed("team", true);
 	}
-
+	
+	var points = d3.select("#points");
+	points.append("circle")
+            .attr("cx", win_pos[0])
+            .attr("cy", win_pos[1])
+			.attr("r", 8)
+            .classed("gold", true);
+			
+	points.append("circle")
+            .attr("cx", ru_pos[0])
+            .attr("cy",	ru_pos[1])
+			.attr("r", 8)
+			.classed("silver", true);
 }
 
 /* DATA LOADING */
