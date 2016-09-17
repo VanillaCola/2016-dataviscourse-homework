@@ -133,14 +133,33 @@ function updateBarChart(selectedDimension) {
 	var bars = d3.select("#bars");
 	bars.attr("transform", "translate(0, 350) scale(1, -1)");
 	
-	var data = bars.selectAll("rect").data(allWorldCupData);
+	if(bars.selectAll("rect").size() == 0)
+		var data = bars.selectAll("rect").data(allWorldCupData).enter().append("rect");
+	else
+		var data = bars.selectAll("rect").data(allWorldCupData);
 	
-	var new_bars = data.enter().append("rect")
-			.attr("x", function(d, i){
+	data.attr("x", function(d, i){
 				return iScale(i);
 			})
 			.attr("y",0)
 			.attr("width", 21)
+			.style("stroke", "white")
+			.style("stroke-width", "0.5px")
+			.on("click", function(d)
+			{
+				if(cur_rect != null)
+				{
+					d3.select(cur_rect).style("fill", rect_color);
+				}
+				cur_rect = this;
+				rect_color = this.style.fill;
+				
+				d3.select(this).style("fill", "red");
+				updateInfo(d);
+				//updateMap(d);
+			})			
+			.transition()
+			.duration(2000)
 			.attr("height", function(d)
 			{
 				if(selectedDimension == "attendance")
@@ -164,7 +183,7 @@ function updateBarChart(selectedDimension) {
 			{
 				if(this == cur_rect)
 				{
-						return rect_color;
+						return "red";
 				}
 				else
 				{
@@ -185,99 +204,7 @@ function updateBarChart(selectedDimension) {
 							return colorScale(d.matches);
 					}
 				}
-			})
-			.style("stroke", "white")
-			.style("stroke-width", "0.5px")
-			.on("click", function(d)
-			{
-				if(cur_rect != null)
-				{
-					d3.select(cur_rect).style("fill", rect_color);
-				}
-				cur_rect = this;
-				rect_color = this.style.fill;
-				
-				d3.select(this).style("fill", "red");
-				updateInfo(d);
-				//updateMap(d);
 			});
-	
-	data.style("opacity", 1)
-		.transition()
-		.duration(2000)
-		.style("opacity", 0)
-		.remove();
-	
-	data = new_bars.merge(data);
-	
-	data.transition()
-		.duration(2000)
-		.attr("x", function(d, i){
-				return iScale(i);
-			})
-		.attr("y",0)
-		.attr("width", 20)
-		.attr("height", function(d)
-			{
-				if(selectedDimension == "attendance")
-				{
-						return Scale(d.attendance);
-				}
-				else if(selectedDimension == "goals")
-				{
-						return Scale(d.goals);
-				}
-				else if(selectedDimension == "teams")
-				{
-						return Scale(d.teams);
-				}
-				else if(selectedDimension == "matches")
-				{
-						return Scale(d.matches);
-				}
-			})
-			.style("fill", function(d)
-			{
-				if(this == cur_rect)
-				{
-						return rect_color;
-				}
-				else
-				{
-					if(selectedDimension == "attendance")
-					{
-							return colorScale(d.attendance);
-					}
-					else if(selectedDimension == "goals")
-					{
-							return colorScale(d.goals);
-					}
-					else if(selectedDimension == "teams")
-					{
-							return colorScale(d.teams);
-					}
-					else if(selectedDimension == "matches")
-					{
-							return colorScale(d.matches);
-					}
-				}
-			})
-			.style("stroke", "white")
-			.style("stroke-width", "1px")
-			.on("click", function(d)
-			{
-				if(cur_rect != null)
-				{
-					d3.select(cur_rect).style("fill", rect_color);
-				}
-				cur_rect = this;
-				rect_color = this.style.fill;
-				
-				d3.select(this).style("fill", "red");
-				updateInfo(d);
-				//updateMap(d);
-			});
-
     // ******* TODO: PART II *******
 
     // Implement how the bars respond to click events
@@ -359,19 +286,41 @@ function drawMap(world) {
     // Draw the background (country outlines; hint: use #map)
     // Make sure and add gridlines to the map
 
-	var map_group = d3.select("#map");
+	var map = d3.select("#map");
 		
-	
 	var path = d3.geoPath().projection(projection);
 	
-	d3.json(world, function(json)
+	var countries = topojson.feature(world, world.objects.countries).features;
+
+	var graticule = d3.geoGraticule();
+	
+		map.append("path")
+			.data(graticule)
+			.enter()
+			.classed("countries", true)
+			.attr("d", path);
+	
+	d3.json(world, function()
 	{
-		map_group.selectAll(".countries")
-			.data(topojson.feature(world, world.objects.countries).features)
+			
+		map.selectAll(".countries")
+			.data(countries)
 			.enter()
 			.append("path")
 			.classed("countries", true)
-			.attr("d", path);
+			.attr("d", path)
+			.attr("id", function(d)
+			{
+				return d.id;
+			});
+			
+		//draw graticule
+		/*
+		map.append("path")
+			.data(graticule)
+			.enter()
+			.classed("countries", true)
+			.attr("d", path);*/
 	});
     // Hint: assign an id to each country path to make it easier to select afterwards
     // we suggest you use the variable in the data element's .id field to set the id
@@ -395,6 +344,12 @@ function clearMap() {
     //the colors and markers for hosts/teams/winners, you can use
     //d3 selection and .classed to set these classes on and off here.
 
+	var map = d3.select("#map");
+	map.selectAll(".countries")
+		.classed("countries", true)
+		.classed("host", false)
+		.classed("silver", false)
+		.classed("gold", false);
 }
 
 
