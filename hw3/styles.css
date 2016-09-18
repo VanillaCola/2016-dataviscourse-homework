@@ -42,7 +42,8 @@
 .grat {
     stroke: grey;
     stroke-width: 1px;
-    opacity: .1;
+    opacity: .2;	
+	fill: none;
 }
 
 @font-face {

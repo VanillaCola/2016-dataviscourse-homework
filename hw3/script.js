@@ -247,6 +247,7 @@ function updateInfo(oneWorldCup) {
 
     // Hint: For the list of teams, you can create an list element for each team.
     // Hint: Select the appropriate ids to update the text content.
+	console.log(oneWorldCup);
 	
 	var Title = oneWorldCup.EDITION;
 	
@@ -302,6 +303,10 @@ function drawMap(world) {
 		.attr("id", function(d)
 		{
 			return d.id;
+		})
+		.on("click", function()
+		{
+			displayRecords(this.id);
 		});
 		
 	map.append("path")
@@ -414,7 +419,41 @@ function updateMap(worldcupData) {
 
 function displayRecords(id)
 {
-	console.log(id);
+	var records   = d3.select("#records");
+	var cups 	  = records.select("#cups");
+	var winner 	  = records.select("#winners");
+	var runner_up = records.select("#runner-ups");
+	
+	records.select("#titles").text(id + " at World Cups");
+	
+	var editions = "";
+	var wins = "";
+	var runners = "";
+	for(var i =0; i < allWorldCupData.length; i++)
+	{
+		if(allWorldCupData[i].win_iso == id)
+		{
+			wins += "<li>" + allWorldCupData[i].EDITION +"</li>";
+		}
+		
+		if(allWorldCupData[i].ru_iso == id)
+		{
+			runners += "<li>" + allWorldCupData[i].EDITION +"</li>"
+		}
+		
+		var iso = allWorldCupData[i].teams_iso;
+		for(var j = 0; j < iso.length; j++)
+		{
+			if(iso[j] == id)
+			{
+				editions += "<li>" + allWorldCupData[i].EDITION +"</li>";
+			}
+		}
+	}
+	
+	cups.html(editions);
+	winner.html(wins);
+	runner_up.html(runners);
 }
 
 /* DATA LOADING */
@@ -449,6 +488,9 @@ d3.csv("data/fifa-world-cup.csv", function (error, csv) {
         d.teams_iso = d3.csvParse(d.TEAM_LIST).columns;
         d.teams_names = d3.csvParse(d.TEAM_NAMES).columns;
 
+		//Revised data
+		d.win_iso = d.winnerID;
+		d.ru_iso = d.runnerupID;
     });
 
     // Store csv data in a global variable
