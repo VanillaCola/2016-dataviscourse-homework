@@ -100,7 +100,7 @@ function updateBarChart(selectedDimension) {
 	
 	d3.select("#xAxis")
 		.transition()
-		.duration(2000)
+		.duration(1000)
 		.attr("transform", "translate(0, 350)")
          .call(xAxis)
 		 .selectAll("text")
@@ -115,7 +115,7 @@ function updateBarChart(selectedDimension) {
 		
 	d3.select("#yAxis")
 			.transition()
-		.duration(2000)
+		.duration(1000)
 		.attr("transform", "translate(70, -50)")
          .call(yAxis)
 		 .selectAll("text")
@@ -159,7 +159,7 @@ function updateBarChart(selectedDimension) {
 				updateMap(d);
 			})			
 			.transition()
-			.duration(2000)
+			.duration(1000)
 			.attr("height", function(d)
 			{
 				if(selectedDimension == "attendance")
@@ -183,7 +183,23 @@ function updateBarChart(selectedDimension) {
 			{
 				if(this == cur_rect)
 				{
-						return "red";
+					if(selectedDimension == "attendance")
+					{
+							rect_color = colorScale(d.attendance);
+					}
+					else if(selectedDimension == "goals")
+					{
+							rect_color = colorScale(d.goals);
+					}
+					else if(selectedDimension == "teams")
+					{
+							rect_color = colorScale(d.teams);
+					}
+					else if(selectedDimension == "matches")
+					{
+							rect_color =  colorScale(d.matches);
+					}
+					return "red";
 				}
 				else
 				{
