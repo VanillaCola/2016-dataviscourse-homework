@@ -85,7 +85,7 @@ If you're not planning on doing the extra credit hacker version, you can move on
   
 The data we provided lists games and their results, but we want to (also) visualize how a team did in the whole tournament, so we have to aggregate. The first step is to change the format of your input data so as to aggregate the parameters as a function of country. Nesting allows elements in an array to be grouped into a hierarchical structure; where you can group by a given parameter in your data. Use the [`d3.nest()`](https://github.com/d3/d3-collection#nests) operator to create a nested object as a function of the `Team` attribute. 
   
-Because we want to aggregate (i.e. sum) the values of goals, wins, losses, and games, for all matches played by a given country, we will want to use the rollup function available within d3.nest(). 
+Because we want to aggregate (i.e. sum) the values of goals, wins, losses, and games, for all matches played by a given country, we will want to use the rollup function available within `d3.nest()`. 
 This rollup function will collapse the elements in each leaf node using a summary function. Here is an example for summing all the values in the "Wins" column: 
 
 ```javascript
@@ -108,7 +108,7 @@ Notice how the object returned by nest does not retain any references to the dat
    
 This means our rollup function will be more elaborate: we will construct a value object for each team that contains the sum of each attribute as well as an array of games that has a similar data structure to the teams, so that we can easily render both in the rows. 
   
-Your output of d3.nest() should look something like this JSON (with more games).
+Your output of `d3.nest()` should look something like this JSON (with more games).
   
 ```JSON
 [{
@@ -141,7 +141,7 @@ Your output of d3.nest() should look something like this JSON (with more games).
   
 The team object now has one field for each of the attributes for a given country, plus a list of games that also have the relevant data set. One special case is the `Result` attribute that is an object with a label and an associated rank (we'll use the rank for sorting later) for the highest round that team reached. You will want to implement this logic inside the rollup function when creating the `Result` attribute. 
   
-Note that we have one more fields for the top-level teams object, the `type`, a string that indicates whether this data object is an aggregate. This field will become important later in the homework.   
+Note that aside from the aggregated attributes, we have one more field for the top-level teams object: the `type`, a string that indicates whether this data object is an aggregate. This field will become important later in the homework.   
 
 ## Part II: Scales, Axis, and List  
 
@@ -263,7 +263,7 @@ sort all the rows as a function of that column attributes. For example, clicking
 the country with most wins is at the top, and the one with the least is at the bottom. Clicking on a header twice should sort the column in the opposite direction. 
 
 As mentioned earlier you have two types of data rows, one that is the aggregate value for all
-matches played by a country, and the other is for a specific game. When implementing your sorting logic, collapse all match specific rows (calling the recently implemented collapseList())
+matches played by a country, and the other is for a specific game. When implementing your sorting logic, collapse all match specific rows (calling the recently implemented `collapseList()`)
 so that only aggregate rows are sorted and displayed. 
 
  Note that in the interest of keeping this homework feasible, we will not be including  glyphs in our headers to indicate the columns are sortable. However, in the interest of discoverability,
@@ -280,19 +280,20 @@ but are still nested underneath the corresponding country.
 
 Now we will create a tree layout for all the games in the second stage. 
 
-We'l start off by implementing createTree(treeData) that takes as an argument the data read in from fifa-tree.csv. 
+We'l start off by implementing `createTree(treeData)` that takes as an argument the data read in from fifa-tree.csv. 
 
-createTree(treeData) should use the d3.tree() layout to generate the tree. Note that before populating the tree with the treeData input argument you will need to use the d3.stratify()
-operator to create the parent/node relationship between the games. The syntax for d3.stratify() is as follows:
+`createTree(treeData)` should use the `d3.tree()` layout to generate the tree. Note that before populating the tree with the treeData input argument you will need to use the `d3.stratify()`
+operator to create the parent/node relationship between the games. The syntax for `d3.stratify()` is as follows:
 
+
+```javascript
 var root = d3.stratify()
     .id(function(d) { return d.name; })
     .parentId(function(d) { return d.parent; })
     (data);
-    
-Where .id is unique identifier for each node and .parentId indicates what field contains the parent Node to that element. 
+```
 
-Recall how we advised you to create a unique id for each data object in fifa-tree.csv? The time has finally come to use that id. 
+Where `.id` is unique identifier for each node and `.parentId` indicates what field contains the parent Node to that element. 
 
 Once you have created the tree, color the nodes for winning teams in red and losing teams in blue as in the figure below. 
 
@@ -301,7 +302,7 @@ Once you have created the tree, color the nodes for winning teams in red and los
 ## Part VII: Link Tree and Table
 
 And last but not least link the table and the tree so that when the user hovers over any aggregate row all the games that country played in (and connecting links) are highlighted in the tree. 
-When a user hovers over a game row, only that game should highlight in the tree. Implement this logic in updateTree() and clearTree(). The former should highlight the appropriate nodes/links and
+When a user hovers over a game row, only that game should highlight in the tree. Implement this logic in `updateTree()` and `clearTree()`. The former should highlight the appropriate nodes/links and
 the later should remove all highlighting from the tree. 
 
 ## DONE! 
@@ -319,4 +320,4 @@ The rubrics on the assignment are:
 10%: Part V: Table is properly sorted when user click on column headers.   
 20%: Part VI: Tree is properly rendered.  
 10%: Part VII: Link between table and tree works correctly for both aggregate and game rows.  
-5%:: Extra Credit: Sorting recursively sorts through match specific rows without affecting their relative position to the aggregate rows.      
+5%: Extra Credit: Sorting recursively sorts through match specific rows without affecting their relative position to the aggregate rows.      
