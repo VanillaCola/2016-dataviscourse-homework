@@ -35,7 +35,6 @@ tbody th{
 
 tbody td {
     padding-right: 5px;
-    padding-left: 5px;
     border-left: solid 1px #000;
     color:black
 }
@@ -152,4 +151,14 @@ header {
     float: left;
 }
 
-
+.team
+{
+	color:#317f19;
+	border-style:none;
+	font-weight: normal;
+	text-align: right;
+	padding-right: 6px;
+	min-width: 125px;
+	cursor:pointer;
+	font-weight: bold;
+}
