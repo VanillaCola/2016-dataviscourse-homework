@@ -122,10 +122,6 @@ header {
     fill: #be2714;
 }
 
-.node text {
-    font: 14px sans-serif;
-}
-
 .winner circle {
     fill: #364e74;
 }

@@ -506,15 +506,15 @@ function createTree(treeData) {
 			+ " " + d.parent.y + "," + d.parent.x;
        });
 	   
-	var node = g.selectAll(".node")
+	var node = g.selectAll("g")
 		.data(nodes.descendants())
 		.enter()
 		.append("g")
 		.attr("class", function(d)
 		{
 			if(d["data"]["data"]["Wins"] == 1) return "winner";
-			else	return "node";
 		})
+		.classed("node", true)
 		.attr("transform", function(d) { 
 			return "translate(" + d.y + "," + d.x + ")"; });
 
@@ -526,7 +526,7 @@ function createTree(treeData) {
     return d.children ? "end" : "start"; })
 	.attr("dy", ".3em")
     .attr("x", function(d) { return d.children ? -13 : 13; })
-    .text(function(d) { return d["data"]["data"]["Team"];});
+    .text(function(d) { return d["data"]["data"]["Team"];})
 };
 
 /**
