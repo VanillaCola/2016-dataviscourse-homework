@@ -116,7 +116,7 @@ Your electoral vote chart should look like this:
 This chart will show the distribution of the popular vote. 
 Again, initialize the chart. 
 
-The chart is updated the same way as the electoral vote chart. The stacked bar chart encodes the vote percentage for each party. Each bar represents one party and is sized according to the percentage of votes won by that party. These values are available in the *D_Percentage*, *R_Percentage* and *I_Percentage* columns in the data. [This isn't elegant, since it stores the data redundantly, but that's just the way the data source is.].You can use the class `.votePercentage` to style your bars.
+The chart is updated the same way as the electoral vote chart. The stacked bar chart encodes the vote percentage for each party. Each bar represents one party and is sized according to the percentage of votes won by that party. These values are available in the *D_PopularPercentage*, *R_PopularPercentage* and *I_PopularPercentage* columns in the data. [This isn't elegant, since it stores the data redundantly, but that's just the way the data source is.].You can use the class `.votePercentage` to style your bars.
 
 Hovering over the bars should display the name of the nominee, total number of votes won and respective percentages for all the parties in a tool tip. You are provided with a method that renders the *HTML* content based on the details you intend to display. All you need to do is to populate the data that you send to this method and call this tool tip wherever necessary. The similar code is provided across most of your files to reduce the overhead of creating it from scratch.
 

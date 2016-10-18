@@ -85,14 +85,14 @@ TileChart.prototype.update = function(electionResult, colorScale){
 
     //Calculates the maximum number of columns to be laid out on the svg
     self.maxColumns = d3.max(electionResult,function(d){
-                                return d["Space"];
+                                return parseInt(d["Space"]);
                             });
 
     //Calculates the maximum number of rows to be laid out on the svg
     self.maxRows = d3.max(electionResult,function(d){
-                                return d["Row"];
+                                return parseInt(d["Row"]);
                         });
-
+    //for reference:https://github.com/Caged/d3-tip
     //Use this tool tip element to handle any hover over the chart
     tip = d3.tip().attr('class', 'd3-tip')
         .direction('se')

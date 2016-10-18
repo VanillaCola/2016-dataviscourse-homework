@@ -68,6 +68,7 @@ VotePercentageChart.prototype.tooltip_render = function (tooltip_data) {
 VotePercentageChart.prototype.update = function(electionResult){
     var self = this;
 
+    //for reference:https://github.com/Caged/d3-tip
     //Use this tool tip element to handle any hover over the chart
     tip = d3.tip().attr('class', 'd3-tip')
         .direction('s')
@@ -78,9 +79,9 @@ VotePercentageChart.prototype.update = function(electionResult){
             /* populate data in the following format
              * tooltip_data = {
              * "result":[
-             * {"nominee": D_Nominee_prop,"votecount": D_Votes,"percentage": D_Percentage,"party":"D"} ,
-             * {"nominee": R_Nominee_prop,"votecount": R_Votes,"percentage": R_Percentage,"party":"R"} ,
-             * {"nominee": I_Nominee_prop,"votecount": I_Votes,"percentage": I_Percentage,"party":"I"}
+             * {"nominee": D_Nominee_prop,"votecount": D_Votes_Total,"percentage": D_PopularPercentage,"party":"D"} ,
+             * {"nominee": R_Nominee_prop,"votecount": R_Votes_Total,"percentage": R_PopularPercentage,"party":"R"} ,
+             * {"nominee": I_Nominee_prop,"votecount": I_Votes_Total,"percentage": I_PopularPercentage,"party":"I"}
              * ]
              * }
              * pass this as an argument to the tooltip_render function then,
