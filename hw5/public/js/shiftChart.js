@@ -13,6 +13,7 @@ function ShiftChart(){
 ShiftChart.prototype.init = function(){
     var self = this;
     self.divShiftChart = d3.select("#shiftChart").classed("sideBar", true);
+	self.ul = self.divShiftChart.append("ul");
 };
 
 /**
@@ -21,7 +22,16 @@ ShiftChart.prototype.init = function(){
  * @param selectedStates data corresponding to the states selected on brush
  */
 ShiftChart.prototype.update = function(selectedStates){
-    var self = this;
+
+	var self = this;
+	
+	self.ul.selectAll("li").remove();
+
+	self.ul.selectAll("li")
+		.data(selectedStates)
+		.enter()
+		.append("li")
+		.text(function(d) {return d;})
 
     // ******* TODO: PART V *******
     //Display the names of selected states in a list

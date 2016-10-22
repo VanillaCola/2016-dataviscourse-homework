@@ -7,13 +7,14 @@
  * @param electionInfo instance of ElectionInfo
  * @param electionWinners data corresponding to the winning parties over mutiple election years
  */
-function YearChart(electoralVoteChart, tileChart, votePercentageChart, electionWinners) {
+function YearChart(electoralVoteChart, tileChart, votePercentageChart, electionWinners, shiftChart) {
     var self = this;
 
     self.electoralVoteChart = electoralVoteChart;
     self.tileChart = tileChart;
     self.votePercentageChart = votePercentageChart;
     self.electionWinners = electionWinners;
+	self.shiftChart = shiftChart;
     self.init();
 };
 
@@ -79,19 +80,95 @@ YearChart.prototype.update = function(){
     //The circles should be colored based on the winning party for that year
     //HINT: Use the .yearChart class to style your circle elements
     //HINT: Use the chooseClass method to choose the color corresponding to the winning party.
-
+	
     //Append text information of each year right below the corresponding circle
     //HINT: Use .yeartext class to style your text elements
-
+	
     //Style the chart by adding a dashed line that connects all these years.
     //HINT: Use .lineChart to style this dashed line
 
+		
+	
     //Clicking on any specific year should highlight that circle and  update the rest of the visualizations
     //HINT: Use .highlighted class to style the highlighted circle
 
     //Election information corresponding to that year should be loaded and passed to
     // the update methods of other visualizations
+	
+	
+	var brush = d3.brushX().extent([[0, self.svgHeight*0.05], [self.svgWidth, self.svgHeight*0.35]]).on("end", brushed);
+	
+	self.svg.append("g").attr("class", "brush").call(brush);
+	
+	function brushed() {
+        var selection = d3.event.selection;
+		var brushedStates = [];
+        for (var i = 0; i < circles.length; i++) {
+            if (selection[0] < circles[i]["left"] && selection[1] > circles[i]["right"]) {
+                brushedStates.push(self.electionWinners[i].YEAR);
+            }
+        }
 
+        self.shiftChart.update(brushedStates);
+    }
+	
+	var circles = [];
+	
+	var xScale = d3.scaleLinear()
+		.range([self.margin.left, self.svgWidth])
+		.domain([0, self.electionWinners.length]);
+	
+	//var yearChart = d3.select("#year-chart").select("svg");
+
+	self.svg.append("line")
+		.attr("x1", 0)
+		.attr("y1", 20)
+		.attr("x2", self.svgWidth)
+		.attr("y2", 20)
+		.classed("lineChart", true);
+	
+	self.svg.selectAll("circle")
+		.data(self.electionWinners)
+		.enter()
+		.append("circle")
+		.attr("cx", function (d, i) {
+			var x = xScale(i);
+			circles[i] = {"left": x-10, "right": x+10};
+			return xScale(i);
+		})
+		.attr("cy", 20)
+		.attr("r", 10)
+		.attr("class", function(d) {return YearChart.prototype.chooseClass(d.PARTY);})
+        .on("mouseover", function(d) {
+            d3.select(this).classed("highlighted", true);
+        })
+        .on("mouseout", function(d) {
+            d3.select(this).classed("highlighted", false);
+        })
+		.on("click", function(d)
+		{	
+		    self.svg.selectAll("circle").classed("selected", false);
+            d3.select(this).classed("selected", true);
+		
+			var file = "data/Year_Timeline_" + d.YEAR + ".csv";
+			d3.csv(file, function(error, csv)
+			{
+				self.electoralVoteChart.update(csv, self.colorScale);
+				self.votePercentageChart.update(csv);
+				self.tileChart.update(csv, self.colorScale);
+			});
+	
+		});
+
+	self.svg.selectAll("text")
+			.data(self.electionWinners)
+			.enter()
+			.append("text")
+			.text(function(d) {return d.YEAR;})
+			.attr("x", function(d, i) {return xScale(i)})
+			.attr("y", 50)
+			.style("font-size", "15px")
+			.classed("yeartext", true);
 
     //******* TODO: EXTRA CREDIT *******
 
@@ -99,4 +176,7 @@ YearChart.prototype.update = function(){
     //Implement a call back method to handle the brush end event.
     //Call the update method of shiftChart and pass the data corresponding to brush selection.
     //HINT: Use the .brush class to style the brush.
+
+	
 };
+

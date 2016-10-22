@@ -4,9 +4,10 @@
  *
  * @param shiftChart an instance of the ShiftChart class
  */
-function ElectoralVoteChart(){
+function ElectoralVoteChart(shiftChart){
 
     var self = this;
+	self.shiftChart = shiftChart;
     self.init();
 };
 
@@ -79,11 +80,112 @@ ElectoralVoteChart.prototype.update = function(electionResult, colorScale){
     //HINT: Use .electoralVotesNote class to style this text element
 
     //HINT: Use the chooseClass method to style your elements based on party wherever necessary.
+	
+	electionResult = electionResult.sort(function (a,b)
+	{
+		//return d3.ascending(a.State_Winner, b.State_Winner) || d3.ascending(a.RD_difference, b.RD_difference);
+		if(a.State_Winner == "I") return -1;
+		else if(b.State_Winner == "I") return 1;
+		
+		return parseFloat(a.RD_Difference) - parseFloat(b.RD_Difference);
+	});
+	
+	self.svg.selectAll("rect").remove();
+	
+	self.svg.selectAll("text").remove();
+	
+	var electoralScale = d3.scaleLinear()
+		.range([0, self.svgWidth])
+        .domain([0, d3.sum(electionResult, function (d) {return d.Total_EV})]);
+	
+	var rectangles = [];
+	
+	self.svg.selectAll("rect")
+		.data(electionResult)
+		.enter()
+		.append("rect")
+		.attr("x", function(d, i)
+		{
+			var x = electoralScale(d3.sum(electionResult.slice(0,i), function (d) {return d.Total_EV}));
+			rectangles[i] = {"left": x, "right": x + electoralScale(d.Total_EV)}; 
+			return x;
+		})
+		.attr("y", 30)
+		.attr("height", 25)
+		.attr("width", function(d, i)
+		{
+			return electoralScale(d.Total_EV);
+		})
+		.style("fill", function(d)
+		{
+			if(d.State_Winner == "I")	return "#45AD6A";
+			return colorScale(d.RD_Difference);
+		})
+		.classed("electoralVotes", true);
+		
+	self.svg.append('text')
+        .text(d3.max(electionResult, function (d) {return d.D_EV_Total}))
+        .attr('x', electoralScale(d3.max(electionResult, function (d) {
+            if (d.I_EV_Total == "") {return 0}
+            else {return d.I_EV_Total}
+        })))
+        .attr('y', 25)
+        .attr('width', 200)
+        .attr('class', ElectoralVoteChart.prototype.chooseClass('D'))
+		.classed("electoralVoteText", true);
+	
+	self.svg.append('text')
+        .text(d3.max(electionResult, function (d) {return d.R_EV_Total}))
+        .attr('x', self.svgWidth)
+        .attr('y', 25)
+        .attr('width', 200)
+        .attr('class', ElectoralVoteChart.prototype.chooseClass('R'))
+		.classed("electoralVoteText", true);
 
+    self.svg.append('text')
+        .text(d3.max(electionResult, function (d) {return d.I_EV_Total}))
+        .attr('x', 0)
+        .attr('y', 25)
+        .attr('width', 200)
+        .attr('class', ElectoralVoteChart.prototype.chooseClass('I'))
+		.classed("electoralVoteText", true);
+		
+    self.svg.append('text')
+        .text('Electoral Vote (270 needed to win)')
+        .attr('x', self.svgWidth/2)
+        .attr('y', 20)
+        .attr('width', 200)
+        .classed("electoralVotesNote", true);
+		
+    self.svg.append('line')
+        .attr("x1", self.svgWidth/2)
+        .attr("y1", 24)
+        .attr("x2", self.svgWidth/2)
+        .attr("y2", 61)
+		.style("stroke", "#000000")
+		.style("stroke-width", "2px")
+        .classed("middlePoint", true);
+	
     //******* TODO: PART V *******
     //Implement brush on the bar chart created above.
     //Implement a call back method to handle the brush end event.
     //Call the update method of shiftChart and pass the data corresponding to brush selection.
     //HINT: Use the .brush class to style the brush.
+	
+	var brush = d3.brushX().extent([[0, self.svgHeight*0.1], [self.svgWidth, self.svgHeight*0.45]]).on("end", brushed);
+	
+	self.svg.append("g").attr("class", "brush").call(brush);
+	
+	function brushed() {
+        var brushedStates = [];
+        var selection = d3.event.selection;
+        for (var i = 0; i < rectangles.length; i++) {
+            if (selection[0] < rectangles[i]["left"] && selection[1] > rectangles[i]["right"]) {
+                brushedStates.push(electionResult[i].State);
+            }
+        }
+		console.log(self);
+        self.shiftChart.update(brushedStates);
+    }
 
 };

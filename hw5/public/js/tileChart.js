@@ -82,6 +82,8 @@ TileChart.prototype.tooltip_render = function (tooltip_data) {
  */
 TileChart.prototype.update = function(electionResult, colorScale){
     var self = this;
+	
+			console.log(electionResult);
 
     //Calculates the maximum number of columns to be laid out on the svg
     self.maxColumns = d3.max(electionResult,function(d){
@@ -101,20 +103,22 @@ TileChart.prototype.update = function(electionResult, colorScale){
         })
         .html(function(d) {
             /* populate data in the following format
-             * tooltip_data = {
-             * "state": State,
-             * "winner":d.State_Winner
-             * "electoralVotes" : Total_EV
-             * "result":[
-             * {"nominee": D_Nominee_prop,"votecount": D_Votes,"percentage": D_Percentage,"party":"D"} ,
-             * {"nominee": R_Nominee_prop,"votecount": R_Votes,"percentage": R_Percentage,"party":"R"} ,
-             * {"nominee": I_Nominee_prop,"votecount": I_Votes,"percentage": I_Percentage,"party":"I"}
-             * ]
-             * }
+			*/
+             tooltip_data = {
+             "state": d.State,
+             "winner":d.State_Winner,
+             "electoralVotes" : d.Total_EV,
+             "result":[
+             {"nominee": d.D_Nominee_prop,"votecount": parseInt(d.D_Votes),"percentage": parseFloat(d.D_Percentage),"party":"D"} ,
+             {"nominee": d.R_Nominee_prop,"votecount": parseInt(d.R_Votes),"percentage": parseFloat(d.R_Percentage),"party":"R"} ,
+             {"nominee": d.I_Nominee_prop,"votecount": parseInt(d.I_Votes),"percentage": parseFloat(d.I_Percentage),"party":"I"}
+             ]
+             }
+			 /*
              * pass this as an argument to the tooltip_render function then,
              * return the HTML content returned from that method.
              * */
-            return ;
+            return self.tooltip_render(tooltip_data);
         });
 
     //Creates a legend element and assigns a scale that needs to be visualized
@@ -142,4 +146,73 @@ TileChart.prototype.update = function(electionResult, colorScale){
     //Call the tool tip on hover over the tiles to display stateName, count of electoral votes
     //then, vote percentage and number of votes won by each party.
     //HINT: Use the .republican, .democrat and .independent classes to style your elements.
-};
+	
+	d3.select(".legendQuantile")
+		.attr("transform", "scale (0.5, 0.5) translate(" + self.svgWidth/10 + ", 0)")
+		.call(legendQuantile);
+	
+
+	var height = self.svgHeight/8;
+	var width = self.svgWidth/12;
+	
+	self.svg.selectAll("rect").remove();
+	
+	self.svg.selectAll("text").remove();
+	
+	
+	self.svg.selectAll("rect")
+		.data(electionResult)
+		.enter()
+		.append("rect")
+		.attr("x", function(d)
+		{
+			return d.Space *width;
+		})
+		.attr("y", function(d)
+		{
+			return d.Row * height;
+		})
+		.attr("height", height)
+		.attr("width", width)
+		.style("fill", function(d){
+			if(d.State_Winner == "I")	return "#45AD6A";
+			return colorScale(d.RD_Difference);})
+		.call(tip)
+    	.on("mouseenter", tip.show)
+		.on("mouseout", tip.hide)
+		.classed("tile",true);
+		
+			var g1 = self.svg.append("g");
+	
+	g1.selectAll("text")
+		.data(electionResult)
+		.enter()
+		.append("text")
+		.text(function(d){return d.Abbreviation;})
+		.attr("x", function(d)
+		{
+			return d.Space *width + width/2;
+		})
+		.attr("y", function(d)
+		{
+			return d.Row * height + height/2;
+		})
+		.classed("tilestext",true);
+	
+		var g2 = self.svg.append("g");
+		
+	g2.selectAll("text")
+		.data(electionResult)
+		.enter()
+		.append("text")
+		.text(function(d){return d.Total_EV;})
+		.attr("x", function(d)
+		{
+			return d.Space *width + width/2;
+		})
+		.attr("y", function(d)
+		{
+			return d.Row * height + height/2 + 15;
+		})
+		.classed("tilestext",true);
+	};

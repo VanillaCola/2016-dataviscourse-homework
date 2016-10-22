@@ -20,9 +20,15 @@ h1 {
     stroke-width: 4;
 }
 
+.lineChart  {
+	stroke: black;
+	stroke-dasharray: 2px;
+}
+
+
 .yeartext, .tilestext, .brushtext{
     text-anchor:middle;
-    font-size: 24px;
+    font-size: 15px;
     fill: #565656;
     stroke-width: 0.1px;
     /*stroke: #e5e5e5;*/
@@ -30,11 +36,11 @@ h1 {
 
 .electoralVotesNote, .votesPercentageNote{
     text-anchor:middle;
-    font-size: 24px;
+    font-size: 15px;
 }
 
 .electoralVoteText, .votesPercentageText{
-    font-size: 35px;
+    font-size: 20px;
 }
 .end{
     text-anchor:end;
@@ -107,7 +113,7 @@ h1 {
 .selected{
     stroke: #404040;;
     stroke-width:4;
-    r:25px;
+    r:18px;
 }
 
 
@@ -183,5 +189,4 @@ h3{
     text-anchor:middle;
     font-size: 32px;
 }
-
 

@@ -23,7 +23,7 @@
         //pass this data and instances of all the charts that update on year selection to yearChart's constructor
         d3.csv("data/yearwiseWinner.csv", function (error, electionWinners) {
             //pass the instances of all the charts that update on selection change in YearChart
-            var yearChart = new YearChart(electoralVoteChart, tileChart, votePercentageChart, electionWinners);
+            var yearChart = new YearChart(electoralVoteChart, tileChart, votePercentageChart, electionWinners, shiftChart);
             yearChart.update();
         });
     }

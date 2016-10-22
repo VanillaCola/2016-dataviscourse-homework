@@ -76,18 +76,19 @@ VotePercentageChart.prototype.update = function(electionResult){
             return [0,0];
         })
         .html(function(d) {
-            /* populate data in the following format
-             * tooltip_data = {
-             * "result":[
-             * {"nominee": D_Nominee_prop,"votecount": D_Votes_Total,"percentage": D_PopularPercentage,"party":"D"} ,
-             * {"nominee": R_Nominee_prop,"votecount": R_Votes_Total,"percentage": R_PopularPercentage,"party":"R"} ,
-             * {"nominee": I_Nominee_prop,"votecount": I_Votes_Total,"percentage": I_PopularPercentage,"party":"I"}
-             * ]
-             * }
+            /* populate data in the following format */
+             tooltip_data = {
+             "result":[
+             {"nominee": electionResult[0].D_Nominee_prop,"votecount": parseInt(electionResult[0].D_Votes_Total),"percentage": parseFloat(electionResult[0].D_PopularPercentage),"party":"D"} ,
+             {"nominee": electionResult[0].R_Nominee_prop,"votecount": parseInt(electionResult[0].R_Votes_Total),"percentage": parseFloat(electionResult[0].R_PopularPercentage),"party":"R"} ,
+             {"nominee": electionResult[0].I_Nominee_prop,"votecount": parseInt(electionResult[0].I_Votes_Total),"percentage": parseFloat(electionResult[0].I_PopularPercentage),"party":"I"}
+             ]
+             }
+			/*
              * pass this as an argument to the tooltip_render function then,
              * return the HTML content returned from that method.
              * */
-            return ;
+            return self.tooltip_render(tooltip_data);
         });
 
 
@@ -112,5 +113,112 @@ VotePercentageChart.prototype.update = function(electionResult){
     //then, vote percentage and number of votes won by each party.
 
     //HINT: Use the chooseClass method to style your elements based on party wherever necessary.
+	
+		
+	self.svg.selectAll("rect").remove();
+	
+	self.svg.selectAll("text").remove();
+	//console.log(electionResult);
 
+
+	var D_PopularPercentage = parseFloat(electionResult[0].D_PopularPercentage);
+	var R_PopularPercentage = parseFloat(electionResult[0].R_PopularPercentage);
+	var I_PopularPercentage = parseFloat(electionResult[0].I_PopularPercentage == "" ? "0" : electionResult[0].I_PopularPercentage);
+	
+	var percentageScale = d3.scaleLinear()
+		.range([0, self.svgWidth])
+        .domain([0, D_PopularPercentage + R_PopularPercentage + I_PopularPercentage]);
+		
+	var x = 0;
+	self.svg.selectAll("rect")
+		.data([{"party":"I", "percentage":I_PopularPercentage}, {"party":"D", "percentage":D_PopularPercentage},{"party":"R", "percentage": R_PopularPercentage}])
+		.enter()
+		.append("rect")
+		.attr("x", function(d)
+		{
+			var cur_x = x;
+			x += d.percentage;
+			return percentageScale(cur_x);
+		})
+		.attr("y", 60)
+		.attr("height", 25)
+		.attr("width", function(d)
+		{
+			return percentageScale(d.percentage);
+		})
+		.style("fill", function(d)
+		{
+			if(d.party == "I")	return "#45AD6A";
+			else if(d.party == "D") return "#0066CC";
+			else	return "#CC0000";
+		})
+		.call(tip)
+    	.on("mouseenter", tip.show)
+		.on("mouseout", tip.hide)
+		.classed("votePercentage ", true);
+		
+	self.svg.append('text')
+        .text(electionResult[0].D_PopularPercentage)
+        .attr('x', percentageScale(electionResult[0].I_PopularPercentage == "" ? 0 : parseFloat(electionResult[0].I_PopularPercentage)+10))
+        .attr('y', 55)
+        .attr('width', 200)
+        .attr('class', VotePercentageChart.prototype.chooseClass('D'))
+		.classed("votesPercentageText ", true);
+		
+	self.svg.append('text')
+        .text(electionResult[0].R_PopularPercentage)
+        .attr('x', self.svgWidth)
+        .attr('y', 55)
+        .attr('width', 200)
+        .attr('class', VotePercentageChart.prototype.chooseClass('R'))
+		.classed("votesPercentageText ", true);
+
+    self.svg.append('text')
+        .text(electionResult[0].I_PopularPercentage)
+        .attr('x', 0)
+        .attr('y', 55)
+        .attr('width', 200)
+        .attr('class', VotePercentageChart.prototype.chooseClass('I'))
+		.classed("votesPercentageText ", true);
+		
+	self.svg.append('text')
+        .text(electionResult[0].D_Nominee_prop)
+        .attr('x', percentageScale(electionResult[0].I_PopularPercentage == "" ? 0 : parseFloat(electionResult[0].I_PopularPercentage)+18))
+        .attr('y', 15)
+        .attr('width', 200)
+        .attr('class', VotePercentageChart.prototype.chooseClass('D'))
+		.classed("votesPercentageText ", true);
+		
+	self.svg.append('text')
+        .text(electionResult[0].R_Nominee_prop)
+        .attr('x', self.svgWidth)
+        .attr('y', 15)
+        .attr('width', 200)
+        .attr('class', VotePercentageChart.prototype.chooseClass('R'))
+		.classed("votesPercentageText ", true);
+
+    self.svg.append('text')
+        .text(electionResult[0].I_Nominee_prop)
+        .attr('x', 0)
+        .attr('y', 15)
+        .attr('width', 200)
+        .attr('class', VotePercentageChart.prototype.chooseClass('I'))
+		.classed("votesPercentageText ", true);
+	
+    self.svg.append('text')
+        .text('Popular Vote (50%)')
+        .attr('x', self.svgWidth/2)
+        .attr('y', 50)
+        .attr('width', 200)
+        .classed("votesPercentageNote", true);
+
+	self.svg.append('line')
+        .attr("x1", self.svgWidth/2)
+        .attr("y1", 54)
+        .attr("x2", self.svgWidth/2)
+        .attr("y2", 91)
+		.style("stroke", "#000000")
+		.style("stroke-width", "2px")
+        .classed("middlePoint", true);	
+		
 };
